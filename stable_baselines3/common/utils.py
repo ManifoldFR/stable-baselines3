@@ -104,11 +104,7 @@ def get_linear_fn(start: float, end: float, end_fraction: float) -> Callable:
     :return:
     """
 
-    def func(progress_remaining: float) -> float:
-        if (1 - progress_remaining) > end_fraction:
-            return end
-        else:
-            return start + (1 - progress_remaining) * (end - start) / end_fraction
+    func = LinearScheduler(None, None, start, end, end_fraction)
 
     return func
 
@@ -122,10 +118,67 @@ def constant_fn(val: float) -> Callable:
     :return:
     """
 
-    def func(_):
-        return val
+    func = ConstantScheduler(None, None, val)
 
     return func
+
+
+class Scheduler(object):
+    """Inspired from :module:`torch.optim.lr_scheduler`.
+    """
+    
+    def __init__(self, optimizer, total_timesteps: int):
+        
+        self.optimizer = optimizer
+        
+        self.num_timesteps = 0
+        self.total_timesteps = total_timesteps
+
+    def get_progress(self):
+        progress = 1.0 - float(self.num_timesteps / self.total_timesteps)
+        return progress
+    
+    def get_lr(self):
+        raise NotImplementedError
+    
+    def __call__(self, *args, **kwargs):
+        return self.get_lr()
+    
+    def state_dict(self):
+        return {key: value for key, value in self.__dict__.items() if key != 'optimizer'}
+
+    def load_state_dict(self, state_dict):
+        """Load the scheduler's state.
+        
+        :param state_dict:
+        """
+        self.__dict__.update(state_dict)
+        
+
+class ConstantScheduler(Scheduler):
+    
+    def __init__(self, optimizer, total_timesteps, val: float):
+        self.val = val
+        super(ConstantScheduler, self).__init__(optimizer, total_timesteps)
+
+    def get_lr(self):
+        return self.val
+
+
+class LinearScheduler(Scheduler):
+    
+    def __init__(self, optimizer, total_timesteps, start: float, end: float, end_fraction: float):
+        self.start = start
+        self.end = end
+        self.end_fraction = end_fraction
+        super(LinearScheduler, self).__init__(optimizer, total_timesteps)
+
+    def get_lr(self):
+        progress = self.get_progress()
+        if (1 - progress) > self.end_fraction:
+            return self.end
+        else:
+            return self.start + (1 - progress) * (self.end - self.start) / self.end_fraction
 
 
 def get_device(device: Union[th.device, str] = "auto") -> th.device:
