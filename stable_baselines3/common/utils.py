@@ -133,10 +133,15 @@ class Scheduler(object):
         
         self.num_timesteps = 0
         self.total_timesteps = total_timesteps
+        
+        self._last_lr = None
 
     def get_progress(self):
         progress = 1.0 - float(self.num_timesteps / self.total_timesteps)
         return progress
+    
+    def get_last_lr(self):
+        return self._last_lr
     
     def get_lr(self):
         raise NotImplementedError
@@ -144,6 +149,11 @@ class Scheduler(object):
     def __call__(self, *args, **kwargs):
         return self.get_lr()
     
+    def step(self):
+        learning_rate = self.get_lr()
+        update_learning_rate(self.optimizer, learning_rate)
+        self._last_lr = [group["lr"] for group in self.optimizer.param_groups]
+
     def state_dict(self):
         return {key: value for key, value in self.__dict__.items() if key != 'optimizer'}
 
@@ -153,7 +163,7 @@ class Scheduler(object):
         :param state_dict:
         """
         self.__dict__.update(state_dict)
-        
+
 
 class ConstantScheduler(Scheduler):
     
