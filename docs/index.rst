@@ -44,6 +44,7 @@ Main Features
    guide/callbacks
    guide/tensorboard
    guide/rl_zoo
+   guide/imitation
    guide/migration
    guide/checking_nan
    guide/developer
@@ -57,6 +58,7 @@ Main Features
   modules/a2c
   modules/ddpg
   modules/dqn
+  modules/her
   modules/ppo
   modules/sac
   modules/td3
@@ -66,7 +68,7 @@ Main Features
   :caption: Common
 
   common/atari_wrappers
-  common/cmd_util
+  common/env_util
   common/distributions
   common/evaluation
   common/env_checker
