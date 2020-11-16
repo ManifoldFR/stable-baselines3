@@ -19,6 +19,9 @@ These algorithms will make it easier for the research community and industry to 
 
 ## Main Features
 
+**The performance of each algorithm was tested** (see *Results* section in their respective page),
+you can take a look at the issues [#48](https://github.com/DLR-RM/stable-baselines3/issues/48) and [#49](https://github.com/DLR-RM/stable-baselines3/issues/49) for more details.
+
 
 | **Features**                | **Stable-Baselines3** |
 | --------------------------- | ----------------------|
@@ -150,6 +153,7 @@ All the following examples can be executed online using Google colab notebooks:
 | A2C   | :x: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:                |
 | DDPG  | :x: | :heavy_check_mark: | :x:                | :x:                 | :x:                | :x:                               |
 | DQN   | :x: | :x: | :heavy_check_mark: | :x:                 | :x:                | :x:                               |
+| HER   | :x: | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :x:                | :x:                               |
 | PPO   | :x: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark:                |
 | SAC   | :x: | :heavy_check_mark: | :x:                | :x:                 | :x:                | :x:                               |
 | TD3   | :x: | :heavy_check_mark: | :x:                | :x:                 | :x:                | :x:                               |

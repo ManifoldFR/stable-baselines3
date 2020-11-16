@@ -3,9 +3,43 @@
 Changelog
 ==========
 
+Pre-Release 0.11.0a0 (WIP)
+-------------------------------
 
-Pre-Release 0.10.0a1 (WIP)
-------------------------------
+Breaking Changes:
+^^^^^^^^^^^^^^^^^
+
+
+New Features:
+^^^^^^^^^^^^^
+- Add support for ``VecFrameStack`` to stack on first or last observation dimension, along with
+  automatic check for image spaces.
+- ``VecFrameStack`` now has a ``channels_order`` argument to tell if observations should be stacked
+  on the first or last observation dimension (originally always stacked on last).
+
+Bug Fixes:
+^^^^^^^^^^
+- Fixed bug where code added VecTranspose on channel-first image environments (thanks @qxcv)
+
+Deprecations:
+^^^^^^^^^^^^^
+
+Others:
+^^^^^^^
+- Add more issue templates
+- Add signatures to callable type annotations (@erniejunior)
+- Improve error message in ``NatureCNN``
+
+Documentation:
+^^^^^^^^^^^^^^
+- Updated algorithm table
+- Minor docstring improvements regarding rollout (@stheid)
+
+
+Pre-Release 0.10.0 (2020-10-28)
+-------------------------------
+
+**HER with online and offline sampling, bug fixes for features extraction**
 
 Breaking Changes:
 ^^^^^^^^^^^^^^^^^
@@ -17,6 +51,7 @@ New Features:
 - Added Hindsight Experience Replay ``HER``. (@megan-klaiber)
 - ``VecNormalize`` now supports ``gym.spaces.Dict`` observation spaces
 - Support logging videos to Tensorboard (@SwamyDev)
+- Added ``share_features_extractor`` argument to ``SAC`` and ``TD3`` policies
 
 Bug Fixes:
 ^^^^^^^^^^
@@ -27,6 +62,10 @@ Bug Fixes:
 - Fix model creation initializing CUDA even when `device="cpu"` is provided
 - Fix ``check_env`` not checking if the env has a Dict actionspace before calling ``_check_nan`` (@wmmc88)
 - Update the check for spaces unsupported by Stable Baselines 3 to include checks on the action space (@wmmc88)
+- Fixed feature extractor bug for target network where the same net was shared instead
+  of being separate. This bug affects ``SAC``, ``DDPG`` and ``TD3`` when using ``CnnPolicy`` (or custom feature extractor)
+- Fixed a bug when passing an environment when loading a saved model with a ``CnnPolicy``, the passed env was not wrapped properly
+  (the bug was introduced when implementing ``HER`` so it should not be present in previous versions)
 
 Deprecations:
 ^^^^^^^^^^^^^
@@ -42,6 +81,9 @@ Documentation:
 - Added first draft of migration guide
 - Added intro to `imitation <https://github.com/HumanCompatibleAI/imitation>`_ library (@shwang)
 - Enabled doc for ``CnnPolicies``
+- Added advanced saving and loading example
+- Added base doc for exporting models
+- Added example for getting and setting model parameters
 
 
 Pre-Release 0.9.0 (2020-10-03)
@@ -463,7 +505,7 @@ And all the contributors:
 @EliasHasle @mrakgr @Bleyddyn @antoine-galataud @junhyeokahn @AdamGleave @keshaviyengar @tperol
 @XMaster96 @kantneel @Pastafarianist @GerardMaggiolino @PatrickWalter214 @yutingsz @sc420 @Aaahh @billtubbs
 @Miffyli @dwiel @miguelrass @qxcv @jaberkow @eavelardev @ruifeng96150 @pedrohbtp @srivatsankrishnan @evilsocket
-@MarvineGothic @jdossgollin @SyllogismRXS @rusu24edward @jbulow @Antymon @seheevic @justinkterry @edbeeching
+@MarvineGothic @jdossgollin @stheid @SyllogismRXS @rusu24edward @jbulow @Antymon @seheevic @justinkterry @edbeeching
 @flodorner @KuKuXia @NeoExtended @PartiallyTyped @mmcenta @richardwu @kinalmehta @rolandgvc @tkelestemur @mloo3
 @tirafesi @blurLake @koulakis @joeljosephjin @shwang @rk37 @andyshih12 @RaphaelWag @xicocaio
 @diditforlulz273 @liorcohen5 @ManifoldFR @mloo3 @SwamyDev @wmmc88 @megan-klaiber
